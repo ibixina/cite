@@ -755,64 +755,83 @@ if (header) {
     }, { passive: true });
 }
 
-// ===== ROLLING SUBTITLE EFFECT (Combination Lock / Slot Style) =====
-const subtitle = document.querySelector('.subtitle');
-if (subtitle) {
-    const originalText = subtitle.textContent.trim();
+// ===== CRYPTIC DECODING EFFECT (Block Titles & Subtitle) =====
+function setupCrypticEffect(element, speed = 40, stagger = 2, initialDelay = 0) {
+    const originalHTML = element.innerHTML;
     const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*";
     let isRolling = false;
 
-    subtitle.style.cursor = 'pointer';
-    subtitle.style.display = 'inline-block'; // Prevent layout shifts
-    subtitle.style.minWidth = `${subtitle.offsetWidth}px`;
-
+    // Split by <br> tags to preserve structure and prevent jitter
+    const lines = originalHTML.split(/<br\s*\/?>/i);
+    
     const triggerRoll = () => {
         if (isRolling) return;
         isRolling = true;
         
-        const letters = originalText.split('');
-        const finalLetters = [...letters];
-        
-        // Animation config
-        const framesPerLetter = 3; 
-        const stagger = 2;
+        // Lock dimensions to prevent jitter
+        const rect = element.getBoundingClientRect();
+        element.style.minWidth = `${rect.width}px`;
+        element.style.minHeight = `${rect.height}px`;
         
         let frame = 0;
+        const totalLetters = lines.join('').length;
+        
         const interval = setInterval(() => {
             let completeCount = 0;
+            let charIndex = 0;
+
+            const newHTML = lines.map((line) => {
+                const letters = line.split('');
+                return letters.map((char) => {
+                    const stopFrame = 8 + (charIndex * stagger);
+                    charIndex++;
+
+                    if (frame >= stopFrame) {
+                        completeCount++;
+                        return char;
+                    }
+                    
+                    if (char === ' ') return ' ';
+                    return charset[Math.floor(Math.random() * charset.length)];
+                }).join('');
+            }).join('<br>');
             
-            const currentDisplay = letters.map((char, i) => {
-                // If this position is ready to stop
-                // We staggered the stops from left to right like a slot machine
-                const stopFrame = 15 + (i * stagger);
-                
-                if (frame >= stopFrame) {
-                    completeCount++;
-                    return finalLetters[i];
-                }
-                
-                // Ignore spaces and separators for rolling logic but still flicker them? 
-                // Actually, flicker everything except spaces for a cooler "cryptic" look
-                if (char === ' ') return ' ';
-                
-                // Rolling / Cryptic flicker
-                return charset[Math.floor(Math.random() * charset.length)];
-            }).join('');
-            
-            subtitle.textContent = currentDisplay;
+            element.innerHTML = newHTML;
             frame++;
             
-            if (completeCount === letters.length) {
+            if (completeCount >= totalLetters || frame > 100) {
                 clearInterval(interval);
-                subtitle.textContent = originalText;
+                element.innerHTML = originalHTML;
                 isRolling = false;
+                // Keep dimensions locked or clear them? Better to clear for responsiveness
+                element.style.minWidth = '';
+                element.style.minHeight = '';
             }
-        }, 40);
+        }, speed);
     };
 
-    subtitle.addEventListener('mouseenter', triggerRoll);
-    setTimeout(triggerRoll, 1200);
+    element.addEventListener('mouseenter', triggerRoll);
+    if (initialDelay > 0) setTimeout(triggerRoll, initialDelay);
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && !isRolling) {
+                triggerRoll();
+            }
+        });
+    }, { threshold: 0.5 });
+    observer.observe(element);
 }
+
+const subtitle = document.querySelector('.subtitle');
+if (subtitle) {
+    setupCrypticEffect(subtitle, 30, 1, 1200);
+}
+
+const blockTitles = document.querySelectorAll('.block-title');
+blockTitles.forEach(title => {
+    setupCrypticEffect(title, 25, 1);
+});
 
 // ===== SMOOTH SCROLL =====
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
