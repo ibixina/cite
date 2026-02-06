@@ -755,6 +755,65 @@ if (header) {
     }, { passive: true });
 }
 
+// ===== ROLLING SUBTITLE EFFECT (Combination Lock / Slot Style) =====
+const subtitle = document.querySelector('.subtitle');
+if (subtitle) {
+    const originalText = subtitle.textContent.trim();
+    const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*";
+    let isRolling = false;
+
+    subtitle.style.cursor = 'pointer';
+    subtitle.style.display = 'inline-block'; // Prevent layout shifts
+    subtitle.style.minWidth = `${subtitle.offsetWidth}px`;
+
+    const triggerRoll = () => {
+        if (isRolling) return;
+        isRolling = true;
+        
+        const letters = originalText.split('');
+        const finalLetters = [...letters];
+        
+        // Animation config
+        const framesPerLetter = 3; 
+        const stagger = 2;
+        
+        let frame = 0;
+        const interval = setInterval(() => {
+            let completeCount = 0;
+            
+            const currentDisplay = letters.map((char, i) => {
+                // If this position is ready to stop
+                // We staggered the stops from left to right like a slot machine
+                const stopFrame = 15 + (i * stagger);
+                
+                if (frame >= stopFrame) {
+                    completeCount++;
+                    return finalLetters[i];
+                }
+                
+                // Ignore spaces and separators for rolling logic but still flicker them? 
+                // Actually, flicker everything except spaces for a cooler "cryptic" look
+                if (char === ' ') return ' ';
+                
+                // Rolling / Cryptic flicker
+                return charset[Math.floor(Math.random() * charset.length)];
+            }).join('');
+            
+            subtitle.textContent = currentDisplay;
+            frame++;
+            
+            if (completeCount === letters.length) {
+                clearInterval(interval);
+                subtitle.textContent = originalText;
+                isRolling = false;
+            }
+        }, 40);
+    };
+
+    subtitle.addEventListener('mouseenter', triggerRoll);
+    setTimeout(triggerRoll, 1200);
+}
+
 // ===== SMOOTH SCROLL =====
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {

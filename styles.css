@@ -147,8 +147,8 @@ body:hover .cursor-follower {
 }
 
 .title-word:hover {
-    color: var(--color-accent);
-    text-shadow: 3px 3px 0 var(--color-black);
+    color: var(--color-black);
+    text-shadow: 2px 2px 0 var(--color-accent);
 }
 
 .title-word:nth-child(1) {
@@ -377,10 +377,14 @@ body:hover .cursor-follower {
 
 .project-card:hover .card-status {
     color: var(--color-white-pure);
+    text-shadow: 0 0 12px var(--color-accent);
 }
 
 .project-card:hover .card-tags span {
-    border-color: var(--color-white-pure);
+    border-color: var(--color-accent);
+    color: var(--color-white-pure);
+    box-shadow: 0 0 10px var(--color-accent);
+    text-shadow: 0 0 8px var(--color-accent);
 }
 
 .card-header {
