@@ -836,9 +836,7 @@ function setupCrypticEffect(element, speed = 40, stagger = 2, initialDelay = 0, 
         }, speed);
     };
 
-    element.addEventListener('mouseenter', () => {
-        if (!isDecoded || startEncrypted) triggerRoll();
-    });
+    element.addEventListener('mouseenter', triggerRoll);
 
     if (initialDelay > 0) setTimeout(triggerRoll, initialDelay);
     
