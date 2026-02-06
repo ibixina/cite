@@ -376,11 +376,11 @@ body:hover .cursor-follower {
 }
 
 .project-card:hover .card-status {
-    color: var(--color-accent);
+    color: var(--color-white-pure);
 }
 
 .project-card:hover .card-tags span {
-    border-color: var(--color-white);
+    border-color: var(--color-white-pure);
 }
 
 .card-header {
