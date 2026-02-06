@@ -4,7 +4,7 @@
     --color-black: #000000;
     --color-white: rgba(255, 255, 255, 0.4);
     --color-white-pure: #ffffff;
-    --color-accent: #00ff00;
+    --color-accent: rgb(75, 0, 130);
     --color-gray: #808080;
 
     --font-display: "Archivo Black", sans-serif;
@@ -744,10 +744,10 @@ body::before {
 @keyframes cvPulse {
     0%,
     100% {
-        box-shadow: 0 0 0 0 rgba(0, 255, 0, 0.7);
+        box-shadow: 0 0 0 0 rgba(75, 0, 130, 0.7);
     }
     50% {
-        box-shadow: 0 0 0 10px rgba(0, 255, 0, 0);
+        box-shadow: 0 0 0 10px rgba(75, 0, 130, 0);
     }
 }
 

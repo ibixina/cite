@@ -120,8 +120,8 @@ if (canvas) {
             
             if (this.energy + activityBoost > 0.3) {
                 const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, glowSize);
-                gradient.addColorStop(0, `rgba(0, 255, 0, ${(this.energy + activityBoost) * 0.4})`);
-                gradient.addColorStop(1, 'rgba(0, 255, 0, 0)');
+                gradient.addColorStop(0, `rgba(75, 0, 130, ${(this.energy + activityBoost) * 0.4})`);
+                gradient.addColorStop(1, 'rgba(75, 0, 130, 0)');
                 
                 ctx.fillStyle = gradient;
                 ctx.beginPath();
@@ -132,7 +132,7 @@ if (canvas) {
             if (this.activity > 0.7) {
                 ctx.fillStyle = '#ffffff';
             } else if (this.energy > 0.7 || this.type === 1) {
-                ctx.fillStyle = '#00ff00';
+                ctx.fillStyle = 'rgb(75, 0, 130)';
             } else {
                 ctx.fillStyle = '#000000';
             }
@@ -149,7 +149,7 @@ if (canvas) {
             }
             
             if (this.type === 1) {
-                ctx.strokeStyle = `rgba(0, 255, 0, ${this.energy * 0.6})`;
+                ctx.strokeStyle = `rgba(75, 0, 130, ${this.energy * 0.6})`;
                 ctx.lineWidth = 2;
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, size + 4, 0, Math.PI * 2);
@@ -198,8 +198,8 @@ if (canvas) {
             const y = this.from.y + this.dy * this.progress;
             
             const gradient = ctx.createRadialGradient(x, y, 0, x, y, 20);
-            gradient.addColorStop(0, `rgba(0, 255, 0, ${this.strength})`);
-            gradient.addColorStop(1, 'rgba(0, 255, 0, 0)');
+            gradient.addColorStop(0, `rgba(75, 0, 130, ${this.strength})`);
+            gradient.addColorStop(1, 'rgba(75, 0, 130, 0)');
             
             ctx.fillStyle = gradient;
             ctx.beginPath();
@@ -218,7 +218,7 @@ if (canvas) {
                     const ty = this.from.y + this.dy * trailProgress;
                     const alpha = (1 - i * 0.5) * this.strength * 0.4;
                     
-                    ctx.fillStyle = `rgba(0, 255, 0, ${alpha})`;
+                    ctx.fillStyle = `rgba(75, 0, 130, ${alpha})`;
                     ctx.beginPath();
                     ctx.arc(tx, ty, 3, 0, Math.PI * 2);
                     ctx.fill();
@@ -394,7 +394,7 @@ if (canvas) {
                             
                             if (avgEnergy > 0.6 || avgActivity > 0.3) {
                                 const energyOpacity = Math.max(avgEnergy, avgActivity) * opacity;
-                                ctx.strokeStyle = `rgba(0, 255, 0, ${energyOpacity * 0.6})`;
+                                ctx.strokeStyle = `rgba(75, 0, 130, ${energyOpacity * 0.6})`;
                                 ctx.lineWidth = 2 + avgEnergy * 2;
                                 ctx.beginPath();
                                 ctx.moveTo(node.x, node.y);
