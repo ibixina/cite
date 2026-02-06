@@ -4,13 +4,32 @@
     --color-black: #000000;
     --color-white: rgba(255, 255, 255, 0.4);
     --color-white-pure: #ffffff;
-    --color-accent: rgb(75, 0, 130);
+    --color-accent: rgb(128, 0, 255);
+    --color-accent-rgb: 128, 0, 255;
     --color-gray: #808080;
 
     --font-display: "Archivo Black", sans-serif;
     --font-mono: "Roboto Mono", monospace;
 
     --border-width: 3px;
+}
+
+/* Theme: Electric Purple (default) */
+[data-theme="indigo"] {
+    --color-accent: rgb(128, 0, 255);
+    --color-accent-rgb: 128, 0, 255;
+}
+
+/* Theme: Teal */
+[data-theme="teal"] {
+    --color-accent: rgb(0, 128, 128);
+    --color-accent-rgb: 0, 128, 128;
+}
+
+/* Theme: Crimson */
+[data-theme="crimson"] {
+    --color-accent: rgb(139, 0, 0);
+    --color-accent-rgb: 139, 0, 0;
 }
 
 * {
@@ -749,10 +768,10 @@ body::before {
 @keyframes cvPulse {
     0%,
     100% {
-        box-shadow: 0 0 0 0 rgba(75, 0, 130, 0.7);
+        box-shadow: 0 0 0 0 rgba(var(--color-accent-rgb), 0.7);
     }
     50% {
-        box-shadow: 0 0 0 10px rgba(75, 0, 130, 0);
+        box-shadow: 0 0 0 10px rgba(var(--color-accent-rgb), 0);
     }
 }
 

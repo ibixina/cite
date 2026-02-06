@@ -1,3 +1,24 @@
+// ===== THEME INITIALIZATION =====
+const themes = ['indigo', 'teal', 'crimson'];
+const themeColors = {
+    indigo: { r: 128, g: 0, b: 255 },
+    teal: { r: 0, g: 128, b: 128 },
+    crimson: { r: 139, g: 0, b: 0 }
+};
+
+const selectedTheme = themes[Math.floor(Math.random() * themes.length)];
+document.documentElement.setAttribute('data-theme', selectedTheme);
+const accentColor = themeColors[selectedTheme];
+
+// Helper function to get accent color with alpha
+function getAccentRGBA(alpha) {
+    return `rgba(${accentColor.r}, ${accentColor.g}, ${accentColor.b}, ${alpha})`;
+}
+
+function getAccentRGB() {
+    return `rgb(${accentColor.r}, ${accentColor.g}, ${accentColor.b})`;
+}
+
 // COMPREHENSIVE NEURAL NETWORK - Fixed Version
 
 // ===== CUSTOM CURSOR =====
@@ -119,8 +140,8 @@ if (canvas) {
             
             if (this.energy + activityBoost > 0.3) {
                 const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, glowSize);
-                gradient.addColorStop(0, `rgba(75, 0, 130, ${(this.energy + activityBoost) * 0.4})`);
-                gradient.addColorStop(1, 'rgba(75, 0, 130, 0)');
+                gradient.addColorStop(0, getAccentRGBA((this.energy + activityBoost) * 0.4));
+                gradient.addColorStop(1, getAccentRGBA(0));
                 
                 ctx.fillStyle = gradient;
                 ctx.beginPath();
@@ -131,7 +152,7 @@ if (canvas) {
             if (this.activity > 0.7) {
                 ctx.fillStyle = '#ffffff';
             } else if (this.energy > 0.7 || this.type === 1) {
-                ctx.fillStyle = 'rgb(75, 0, 130)';
+                ctx.fillStyle = getAccentRGB();
             } else {
                 ctx.fillStyle = '#000000';
             }
@@ -148,7 +169,7 @@ if (canvas) {
             }
             
             if (this.type === 1) {
-                ctx.strokeStyle = `rgba(75, 0, 130, ${this.energy * 0.6})`;
+                ctx.strokeStyle = getAccentRGBA(this.energy * 0.6);
                 ctx.lineWidth = 2;
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, size + 4, 0, Math.PI * 2);
@@ -197,8 +218,8 @@ if (canvas) {
             const y = this.from.y + this.dy * this.progress;
             
             const gradient = ctx.createRadialGradient(x, y, 0, x, y, 20);
-            gradient.addColorStop(0, `rgba(75, 0, 130, ${this.strength})`);
-            gradient.addColorStop(1, 'rgba(75, 0, 130, 0)');
+            gradient.addColorStop(0, getAccentRGBA(this.strength));
+            gradient.addColorStop(1, getAccentRGBA(0));
             
             ctx.fillStyle = gradient;
             ctx.beginPath();
@@ -217,7 +238,7 @@ if (canvas) {
                     const ty = this.from.y + this.dy * trailProgress;
                     const alpha = (1 - i * 0.5) * this.strength * 0.4;
                     
-                    ctx.fillStyle = `rgba(75, 0, 130, ${alpha})`;
+                    ctx.fillStyle = getAccentRGBA(alpha);
                     ctx.beginPath();
                     ctx.arc(tx, ty, 3, 0, Math.PI * 2);
                     ctx.fill();
@@ -393,7 +414,7 @@ if (canvas) {
                             
                             if (avgEnergy > 0.6 || avgActivity > 0.3) {
                                 const energyOpacity = Math.max(avgEnergy, avgActivity) * opacity;
-                                ctx.strokeStyle = `rgba(75, 0, 130, ${energyOpacity * 0.6})`;
+                                ctx.strokeStyle = getAccentRGBA(energyOpacity * 0.6);
                                 ctx.lineWidth = 2 + avgEnergy * 2;
                                 ctx.beginPath();
                                 ctx.moveTo(node.x, node.y);
