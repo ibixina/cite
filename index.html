@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Portfolio of a computational cognitive scientist exploring the emergence of intelligence through research and experimentation.">
+    
+    <!-- Performance optimizations -->
+    <meta name="theme-color" content="#ffffff">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Roboto+Mono:wght@400;700&display=swap" as="style">
+    
+    <title>EMERGENCE // Computational Cognitive Science</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <canvas id="neural-canvas"></canvas>
+    
+    <div class="cursor-follower"></div>
+    
+    <header class="header">
+        <div class="header-line"></div>
+        <h1 class="main-title">
+            <span class="title-word" data-text="EMERGENCE">EMERGENCE</span>
+            <span class="title-word" data-text="OF">OF</span>
+            <span class="title-word" data-text="INTELLIGENCE">INTELLIGENCE</span>
+        </h1>
+        <div class="header-line"></div>
+        <p class="subtitle">PhD CANDIDATE / COMPUTATIONAL COGNITIVE SCIENCE</p>
+    </header>
+
+    <nav class="nav">
+        <a href="#section-01" class="nav-item">[01] ABOUT</a>
+        <a href="#section-02" class="nav-item">[02] RESEARCH</a>
+        <a href="#section-03" class="nav-item">[03] PUBLICATIONS</a>
+        <a href="#section-04" class="nav-item">[04] CONTACT</a>
+    </nav>
+
+    <main class="container">
+        <!-- About Section -->
+        <section id="section-01" class="section">
+            <div class="section-marker">
+                <span class="marker-number">01</span>
+                <span class="marker-label">ABOUT</span>
+            </div>
+            <div class="section-content">
+                <div class="content-block">
+                    <h2 class="block-title">INVESTIGATING THE<br>COMPUTATIONAL MIND</h2>
+                    <div class="text-columns">
+                        <div class="column">
+                            <p class="lead">Exploring how intelligent behavior emerges from computational processes, bridging neuroscience, AI, and cognitive psychology.</p>
+                            <p>My research focuses on understanding fundamental principles underlying cognition—from perception and learning to decision-making and consciousness.</p>
+                        </div>
+                        <div class="column">
+                            <p>Through computational modeling and behavioral experiments, I investigate how complex mental phenomena arise from the interaction of simpler components.</p>
+                            <p>I combine theoretical frameworks from dynamical systems, information theory, and machine learning to build models that capture cognitive richness.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="specs-grid">
+                    <div class="spec-box">
+                        <div class="spec-header">RESEARCH_FOCUS</div>
+                        <ul class="spec-list">
+                            <li>→ Computational Modeling</li>
+                            <li>→ Neural Networks</li>
+                            <li>→ Cognitive Architecture</li>
+                            <li>→ Emergent Behavior</li>
+                            <li>→ Information Processing</li>
+                        </ul>
+                    </div>
+                    <div class="spec-box">
+                        <div class="spec-header">TECHNICAL_STACK</div>
+                        <ul class="spec-list">
+                            <li>→ Python / R / MATLAB</li>
+                            <li>→ PyTorch / TensorFlow</li>
+                            <li>→ Statistical Analysis</li>
+                            <li>→ Data Visualization</li>
+                            <li>→ Experimental Design</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Research Section -->
+        <section id="section-02" class="section">
+            <div class="section-marker">
+                <span class="marker-number">02</span>
+                <span class="marker-label">RESEARCH</span>
+            </div>
+            <div class="section-content">
+                <div class="project-grid">
+                    <div class="project-card">
+                        <div class="card-header">
+                            <span class="card-id">PROJECT_001</span>
+                            <span class="card-status">ACTIVE</span>
+                        </div>
+                        <h3 class="card-title">DISSERTATION PROJECT</h3>
+                        <p class="card-desc">Hierarchical representations in artificial neural networks and their correspondence to biological neural systems.</p>
+                        <div class="card-tags">
+                            <span>#NEURAL_NETWORKS</span>
+                            <span>#REPRESENTATION_LEARNING</span>
+                        </div>
+                    </div>
+
+                    <div class="project-card">
+                        <div class="card-header">
+                            <span class="card-id">PROJECT_002</span>
+                            <span class="card-status">ACTIVE</span>
+                        </div>
+                        <h3 class="card-title">PREDICTIVE PROCESSING</h3>
+                        <p class="card-desc">Role of prediction errors in learning and how the brain constructs models of sensory input.</p>
+                        <div class="card-tags">
+                            <span>#PREDICTIVE_CODING</span>
+                            <span>#ACTIVE_INFERENCE</span>
+                        </div>
+                    </div>
+
+                    <div class="project-card">
+                        <div class="card-header">
+                            <span class="card-id">PROJECT_003</span>
+                            <span class="card-status">ONGOING</span>
+                        </div>
+                        <h3 class="card-title">ATTENTION MECHANISMS</h3>
+                        <p class="card-desc">Computational models capturing bottom-up and top-down influences on information selection.</p>
+                        <div class="card-tags">
+                            <span>#ATTENTION</span>
+                            <span>#COGNITIVE_CONTROL</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Publications Section -->
+        <section id="section-03" class="section">
+            <div class="section-marker">
+                <span class="marker-number">03</span>
+                <span class="marker-label">PUBLICATIONS</span>
+            </div>
+            <div class="section-content">
+                <div class="pub-stack">
+                    <article class="pub-entry">
+                        <div class="pub-meta">
+                            <span class="pub-year">2025</span>
+                            <span class="pub-type">JOURNAL</span>
+                        </div>
+                        <h3 class="pub-title">Emergent Hierarchical Representations in Deep Learning Models of Visual Cortex</h3>
+                        <p class="pub-authors"><strong>YOUR NAME</strong>, CO-AUTHOR A., CO-AUTHOR B.</p>
+                        <p class="pub-venue">Journal of Computational Neuroscience</p>
+                        <div class="pub-actions">
+                            <a href="#" class="pub-link">[PAPER]</a>
+                            <a href="#" class="pub-link">[CODE]</a>
+                            <a href="#" class="pub-link">[DATA]</a>
+                        </div>
+                    </article>
+
+                    <article class="pub-entry">
+                        <div class="pub-meta">
+                            <span class="pub-year">2024</span>
+                            <span class="pub-type">CONFERENCE</span>
+                        </div>
+                        <h3 class="pub-title">Predictive Processing and Active Inference: A Computational Framework</h3>
+                        <p class="pub-authors">CO-AUTHOR C., <strong>YOUR NAME</strong>, CO-AUTHOR D.</p>
+                        <p class="pub-venue">Cognitive Science Society Annual Conference</p>
+                        <div class="pub-actions">
+                            <a href="#" class="pub-link">[PAPER]</a>
+                            <a href="#" class="pub-link">[POSTER]</a>
+                        </div>
+                    </article>
+
+                    <article class="pub-entry">
+                        <div class="pub-meta">
+                            <span class="pub-year">2024</span>
+                            <span class="pub-type">WORKSHOP</span>
+                        </div>
+                        <h3 class="pub-title">Attention Mechanisms in Biological and Artificial Systems</h3>
+                        <p class="pub-authors"><strong>YOUR NAME</strong>, ADVISOR NAME</p>
+                        <p class="pub-venue">Neural Information Processing Systems (Workshop)</p>
+                        <div class="pub-actions">
+                            <a href="#" class="pub-link">[PAPER]</a>
+                            <a href="#" class="pub-link">[SLIDES]</a>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="section-04" class="section">
+            <div class="section-marker">
+                <span class="marker-number">04</span>
+                <span class="marker-label">CONTACT</span>
+            </div>
+            <div class="section-content">
+                <div class="contact-layout">
+                    <div class="contact-intro">
+                        <h2 class="block-title">LET'S CONNECT</h2>
+                        <p class="lead">Open to collaboration, discussion, and opportunities in computational cognitive science.</p>
+                    </div>
+                    <div class="contact-methods">
+                        <div class="contact-box">
+                            <div class="contact-label">EMAIL</div>
+                            <a href="mailto:your.email@university.edu" class="contact-value">your.email@university.edu</a>
+                        </div>
+                        <div class="contact-box">
+                            <div class="contact-label">TWITTER</div>
+                            <a href="https://twitter.com/handle" class="contact-value" target="_blank">@yourhandle</a>
+                        </div>
+                        <div class="contact-box">
+                            <div class="contact-label">GITHUB</div>
+                            <a href="https://github.com/username" class="contact-value" target="_blank">github.com/username</a>
+                        </div>
+                        <div class="contact-box">
+                            <div class="contact-label">SCHOLAR</div>
+                            <a href="https://scholar.google.com" class="contact-value" target="_blank">Google Scholar Profile</a>
+                        </div>
+                        <div class="contact-box cv-box">
+                            <a href="cv.pdf" class="cv-download" download>
+                                <span>DOWNLOAD_CV.PDF</span>
+                                <span class="download-arrow">↓</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-line"></div>
+        <div class="footer-content">
+            <p>© 2026 YOUR NAME / ALL RIGHTS RESERVED</p>
+            <p>BACKGROUND: NEURAL NETWORK FORMATION SIMULATION</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
