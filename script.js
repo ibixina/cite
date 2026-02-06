@@ -756,19 +756,45 @@ if (header) {
 }
 
 // ===== CRYPTIC DECODING EFFECT (Block Titles & Subtitle) =====
-function setupCrypticEffect(element, speed = 40, stagger = 2, initialDelay = 0) {
+function setupCrypticEffect(element, speed = 40, stagger = 2, initialDelay = 0, startEncrypted = false) {
     const originalHTML = element.innerHTML;
     const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*";
     let isRolling = false;
+    let isDecoded = false;
 
     // Split by <br> tags to preserve structure and prevent jitter
     const lines = originalHTML.split(/<br\s*\/?>/i);
+    
+    const scramble = () => {
+        return lines.map((line) => {
+            return line.split('').map((char) => {
+                if (char === ' ') return ' ';
+                return charset[Math.floor(Math.random() * charset.length)];
+            }).join('');
+        }).join('<br>');
+    };
+
+    if (startEncrypted) {
+        // We need to wait for fonts and layout to be ready to get accurate dimensions
+        const initializeEncryption = () => {
+            const rect = element.getBoundingClientRect();
+            if (rect.width > 0) {
+                element.style.minWidth = `${rect.width}px`;
+                element.style.minHeight = `${rect.height}px`;
+                element.innerHTML = scramble();
+            } else {
+                // If not ready, try again
+                requestAnimationFrame(initializeEncryption);
+            }
+        };
+        initializeEncryption();
+    }
     
     const triggerRoll = () => {
         if (isRolling) return;
         isRolling = true;
         
-        // Lock dimensions to prevent jitter
+        // Ensure dimensions are locked
         const rect = element.getBoundingClientRect();
         element.style.minWidth = `${rect.width}px`;
         element.style.minHeight = `${rect.height}px`;
@@ -803,24 +829,29 @@ function setupCrypticEffect(element, speed = 40, stagger = 2, initialDelay = 0) 
                 clearInterval(interval);
                 element.innerHTML = originalHTML;
                 isRolling = false;
-                // Keep dimensions locked or clear them? Better to clear for responsiveness
+                isDecoded = true;
                 element.style.minWidth = '';
                 element.style.minHeight = '';
             }
         }, speed);
     };
 
-    element.addEventListener('mouseenter', triggerRoll);
+    element.addEventListener('mouseenter', () => {
+        if (!isDecoded || startEncrypted) triggerRoll();
+    });
+
     if (initialDelay > 0) setTimeout(triggerRoll, initialDelay);
     
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting && !isRolling) {
-                triggerRoll();
-            }
-        });
-    }, { threshold: 0.5 });
-    observer.observe(element);
+    if (!startEncrypted) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !isRolling && !isDecoded) {
+                    triggerRoll();
+                }
+            });
+        }, { threshold: 0.5 });
+        observer.observe(element);
+    }
 }
 
 const subtitle = document.querySelector('.subtitle');
@@ -830,7 +861,7 @@ if (subtitle) {
 
 const blockTitles = document.querySelectorAll('.block-title');
 blockTitles.forEach(title => {
-    setupCrypticEffect(title, 25, 1);
+    setupCrypticEffect(title, 25, 1, 0, true);
 });
 
 // ===== SMOOTH SCROLL =====
