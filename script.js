@@ -655,114 +655,32 @@ projectCards.forEach((card, index) => {
     });
 });
 
-// ===== GLITCH EFFECT =====
-const titleWords = document.querySelectorAll('.title-word');
-titleWords.forEach(word => {
-    word.addEventListener('mouseenter', () => {
-        let iterations = 0;
-        const originalText = word.dataset.text;
-        
-        const glitchInterval = setInterval(() => {
-            word.textContent = originalText
-                .split('')
-                .map((char, index) => {
-                    if (index < iterations) return originalText[index];
-                    return String.fromCharCode(65 + Math.floor(Math.random() * 26));
-                })
-                .join('');
-            
-            iterations += 1 / 3;
-            
-            if (iterations >= originalText.length) {
-                clearInterval(glitchInterval);
-                word.textContent = originalText;
+// ===== CRYPTIC DECODING EFFECT (Optimized) =====
+const crypticObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            // Trigger animation if attached to element
+            if (entry.target.triggerCrypticAnimation) {
+                entry.target.triggerCrypticAnimation();
             }
-        }, 30);
-    });
-});
-
-// ===== PUBLICATION ENTRIES =====
-const pubEntries = document.querySelectorAll('.pub-entry');
-pubEntries.forEach((entry, index) => {
-    entry.style.opacity = '0';
-    entry.style.transform = 'translateX(-30px)';
-    entry.style.transition = `all 0.6s cubic-bezier(0.4, 0, 0.2, 1) ${index * 150}ms`;
-    
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(e => {
-            if (e.isIntersecting) {
-                e.target.style.opacity = '1';
-                e.target.style.transform = 'translateX(0)';
-                observer.unobserve(e.target);
-            }
-        });
-    }, { threshold: 0.1 });
-    
-    observer.observe(entry);
-});
-
-// ===== SECTION COUNTERS =====
-const sectionNumbers = document.querySelectorAll('.marker-number');
-sectionNumbers.forEach(number => {
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const target = parseInt(number.textContent);
-                let current = 0;
-                const increment = target / 30;
-                
-                const counter = setInterval(() => {
-                    current += increment;
-                    if (current >= target) {
-                        number.textContent = String(target).padStart(2, '0');
-                        clearInterval(counter);
-                    } else {
-                        number.textContent = String(Math.floor(current)).padStart(2, '0');
-                    }
-                }, 30);
-                
-                observer.unobserve(number);
-            }
-        });
-    }, { threshold: 0.5 });
-    
-    observer.observe(number);
-});
-
-// ===== CONTACT BOXES =====
-const contactBoxes = document.querySelectorAll('.contact-box');
-contactBoxes.forEach(box => {
-    box.addEventListener('mouseenter', function() {
-        this.style.transform = 'translate(-8px, -8px) scale(1.02)';
-        this.style.boxShadow = '8px 8px 0 #000000';
-    });
-    
-    box.addEventListener('mouseleave', function() {
-        this.style.transform = 'translate(0, 0) scale(1)';
-        this.style.boxShadow = 'none';
-    });
-});
-
-// ===== HEADER VISIBILITY =====
-const header = document.querySelector('.header');
-if (header) {
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > window.innerHeight * 0.3) {
-            header.classList.add('header-hidden');
-        } else {
-            header.classList.remove('header-hidden');
         }
-    }, { passive: true });
-}
+    });
+}, { threshold: 0.5 });
 
-// ===== CRYPTIC DECODING EFFECT (Block Titles & Subtitle) =====
-function setupCrypticEffect(element, speed = 40, stagger = 2, initialDelay = 0, startEncrypted = false) {
+function setupCrypticEffect(element, config = {}) {
+    const {
+        speed = 40,
+        stagger = 2,
+        initialDelay = 0,
+        startEncrypted = false
+    } = config;
+
     const originalHTML = element.innerHTML;
     const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*";
     let isRolling = false;
-    let isDecoded = false;
+    let isDecoded = !startEncrypted;
 
-    // Split by <br> tags to preserve structure and prevent jitter
+    // Split by <br> tags to preserve structure
     const lines = originalHTML.split(/<br\s*\/?>/i);
     
     const scramble = () => {
@@ -775,7 +693,6 @@ function setupCrypticEffect(element, speed = 40, stagger = 2, initialDelay = 0, 
     };
 
     if (startEncrypted) {
-        // We need to wait for fonts and layout to be ready to get accurate dimensions
         const initializeEncryption = () => {
             const rect = element.getBoundingClientRect();
             if (rect.width > 0) {
@@ -783,7 +700,6 @@ function setupCrypticEffect(element, speed = 40, stagger = 2, initialDelay = 0, 
                 element.style.minHeight = `${rect.height}px`;
                 element.innerHTML = scramble();
             } else {
-                // If not ready, try again
                 requestAnimationFrame(initializeEncryption);
             }
         };
@@ -794,7 +710,6 @@ function setupCrypticEffect(element, speed = 40, stagger = 2, initialDelay = 0, 
         if (isRolling) return;
         isRolling = true;
         
-        // Ensure dimensions are locked
         const rect = element.getBoundingClientRect();
         element.style.minWidth = `${rect.width}px`;
         element.style.minHeight = `${rect.height}px`;
@@ -836,30 +751,32 @@ function setupCrypticEffect(element, speed = 40, stagger = 2, initialDelay = 0, 
         }, speed);
     };
 
+    // Attach trigger to element for observer access
+    element.triggerCrypticAnimation = () => {
+        if (!isRolling && !isDecoded) triggerRoll();
+    };
+
     element.addEventListener('mouseenter', triggerRoll);
 
     if (initialDelay > 0) setTimeout(triggerRoll, initialDelay);
     
     if (!startEncrypted) {
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting && !isRolling && !isDecoded) {
-                    triggerRoll();
-                }
-            });
-        }, { threshold: 0.5 });
-        observer.observe(element);
+        crypticObserver.observe(element);
     }
 }
 
+// Apply effects
 const subtitle = document.querySelector('.subtitle');
 if (subtitle) {
-    setupCrypticEffect(subtitle, 30, 1, 1200);
+    setupCrypticEffect(subtitle, { speed: 30, stagger: 1, initialDelay: 1200 });
 }
 
-const blockTitles = document.querySelectorAll('.block-title');
-blockTitles.forEach(title => {
-    setupCrypticEffect(title, 25, 1, 0, true);
+document.querySelectorAll('.block-title').forEach(title => {
+    setupCrypticEffect(title, { speed: 25, stagger: 1, startEncrypted: true });
+});
+
+document.querySelectorAll('.title-word').forEach(word => {
+    setupCrypticEffect(word, { speed: 30, stagger: 2 });
 });
 
 // ===== SMOOTH SCROLL =====
