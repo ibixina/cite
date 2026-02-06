@@ -463,6 +463,126 @@ if (canvas) {
     });
 }
 
+// ===== LIVING INK BLOT EFFECT (High Performance) =====
+class LivingInk {
+    constructor(container) {
+        this.container = container;
+        this.canvas = document.createElement('canvas');
+        this.ctx = this.canvas.getContext('2d', { alpha: true });
+        this.container.appendChild(this.canvas);
+        
+        this.particles = [];
+        this.mouseX = -1000;
+        this.mouseY = -1000;
+        this.isHovered = false;
+        this.animationId = null;
+        this.particleCount = 60;
+        
+        this.init();
+    }
+
+    init() {
+        this.resize();
+        window.addEventListener('resize', () => this.resize());
+        
+        this.container.addEventListener('mouseenter', () => {
+            this.isHovered = true;
+            if (!this.animationId) this.animate();
+        });
+        
+        this.container.addEventListener('mouseleave', () => {
+            this.isHovered = false;
+        });
+
+        this.container.addEventListener('mousemove', (e) => {
+            const rect = this.container.getBoundingClientRect();
+            this.mouseX = e.clientX - rect.left;
+            this.mouseY = e.clientY - rect.top;
+        });
+
+        // Create particles (alive, swarm behavior)
+        for (let i = 0; i < this.particleCount; i++) {
+            this.particles.push({
+                x: Math.random() * this.canvas.width,
+                y: Math.random() * this.canvas.height,
+                vx: (Math.random() - 0.5) * 2,
+                vy: (Math.random() - 0.5) * 2,
+                size: Math.random() * 1.5 + 0.5,
+                jitter: Math.random() * 0.4 + 0.1,
+                accel: 0.08 + Math.random() * 0.05
+            });
+        }
+    }
+
+    resize() {
+        const rect = this.container.getBoundingClientRect();
+        this.canvas.width = rect.width;
+        this.canvas.height = rect.height;
+    }
+
+    animate() {
+        // Stop if not hovered and particles have settled
+        if (!this.isHovered && this.particles.every(p => Math.abs(p.vx) < 0.05 && Math.abs(p.vy) < 0.05)) {
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            this.animationId = null;
+            return;
+        }
+
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+
+        const swarmTargetX = this.isHovered ? this.mouseX : this.canvas.width / 2;
+        const swarmTargetY = this.isHovered ? this.mouseY : this.canvas.height / 2;
+
+        this.particles.forEach(p => {
+            // Steering towards target
+            const dx = swarmTargetX - p.x;
+            const dy = swarmTargetY - p.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            
+            if (this.isHovered) {
+                const force = Math.min(dist * 0.002, p.accel);
+                p.vx += (dx / dist) * force;
+                p.vy += (dy / dist) * force;
+            } else {
+                // Return to center slowly
+                p.vx += (dx / dist) * 0.001;
+                p.vy += (dy / dist) * 0.001;
+            }
+
+            // Life-like jitter
+            p.vx += (Math.random() - 0.5) * p.jitter;
+            p.vy += (Math.random() - 0.5) * p.jitter;
+
+            // Friction
+            p.vx *= 0.95;
+            p.vy *= 0.95;
+
+            p.x += p.vx;
+            p.y += p.vy;
+
+            // Drawing
+            this.ctx.beginPath();
+            this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            this.ctx.fill();
+            
+            // Subtle "bleeding" connections
+            if (dist < 30) {
+                this.ctx.beginPath();
+                this.ctx.strokeStyle = `rgba(0, 0, 0, ${0.1 * (1 - dist/30)})`;
+                this.ctx.moveTo(p.x, p.y);
+                this.ctx.lineTo(swarmTargetX, swarmTargetY);
+                this.ctx.stroke();
+            }
+        });
+
+        this.animationId = requestAnimationFrame(() => this.animate());
+    }
+}
+
+const specBoxes = document.querySelectorAll('.spec-box');
+specBoxes.forEach(box => new LivingInk(box));
+
 // ===== INTERACTIVE PROJECT CARDS - SIMPLIFIED 3D TILT =====
 const projectCards = document.querySelectorAll('.project-card');
 
@@ -622,6 +742,18 @@ contactBoxes.forEach(box => {
         this.style.boxShadow = 'none';
     });
 });
+
+// ===== HEADER VISIBILITY =====
+const header = document.querySelector('.header');
+if (header) {
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > window.innerHeight * 0.3) {
+            header.classList.add('header-hidden');
+        } else {
+            header.classList.remove('header-hidden');
+        }
+    }, { passive: true });
+}
 
 // ===== SMOOTH SCROLL =====
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
