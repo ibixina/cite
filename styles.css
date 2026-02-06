@@ -103,6 +103,7 @@ body:hover .cursor-follower {
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
+    transform: translateY(-20px);
 }
 
 .header-inner {
