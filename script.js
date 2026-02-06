@@ -1,5 +1,4 @@
 // COMPREHENSIVE NEURAL NETWORK - Fixed Version
-console.log('🧠 Comprehensive Neural Network - Loading...');
 
 // ===== CUSTOM CURSOR =====
 const cursor = document.querySelector('.cursor-follower');
@@ -478,27 +477,30 @@ class LivingInk {
         this.animationId = null;
         this.particleCount = 60;
         
+        // Bind handlers for proper cleanup
+        this.resizeHandler = () => this.resize();
+        this.mouseEnterHandler = () => {
+            this.isHovered = true;
+            if (!this.animationId) this.animate();
+        };
+        this.mouseLeaveHandler = () => {
+            this.isHovered = false;
+        };
+        this.mouseMoveHandler = (e) => {
+            const rect = this.container.getBoundingClientRect();
+            this.mouseX = e.clientX - rect.left;
+            this.mouseY = e.clientY - rect.top;
+        };
+        
         this.init();
     }
 
     init() {
         this.resize();
-        window.addEventListener('resize', () => this.resize());
-        
-        this.container.addEventListener('mouseenter', () => {
-            this.isHovered = true;
-            if (!this.animationId) this.animate();
-        });
-        
-        this.container.addEventListener('mouseleave', () => {
-            this.isHovered = false;
-        });
-
-        this.container.addEventListener('mousemove', (e) => {
-            const rect = this.container.getBoundingClientRect();
-            this.mouseX = e.clientX - rect.left;
-            this.mouseY = e.clientY - rect.top;
-        });
+        window.addEventListener('resize', this.resizeHandler);
+        this.container.addEventListener('mouseenter', this.mouseEnterHandler);
+        this.container.addEventListener('mouseleave', this.mouseLeaveHandler);
+        this.container.addEventListener('mousemove', this.mouseMoveHandler);
 
         // Create particles (alive, swarm behavior)
         for (let i = 0; i < this.particleCount; i++) {
@@ -578,10 +580,24 @@ class LivingInk {
 
         this.animationId = requestAnimationFrame(() => this.animate());
     }
+
+    destroy() {
+        window.removeEventListener('resize', this.resizeHandler);
+        this.container.removeEventListener('mouseenter', this.mouseEnterHandler);
+        this.container.removeEventListener('mouseleave', this.mouseLeaveHandler);
+        this.container.removeEventListener('mousemove', this.mouseMoveHandler);
+        if (this.animationId) {
+            cancelAnimationFrame(this.animationId);
+            this.animationId = null;
+        }
+        this.canvas.remove();
+        this.particles = [];
+    }
 }
 
 const specBoxes = document.querySelectorAll('.spec-box');
-specBoxes.forEach(box => new LivingInk(box));
+const livingInkInstances = [];
+specBoxes.forEach(box => livingInkInstances.push(new LivingInk(box)));
 
 // ===== INTERACTIVE PROJECT CARDS - SIMPLIFIED 3D TILT =====
 const projectCards = document.querySelectorAll('.project-card');
@@ -848,5 +864,14 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-console.log('🧠 Comprehensive Neural Network loaded!');
-console.log('Controls: N=add node, C=reset, E=energy wave, S=signal burst');
+// ===== HEADER VISIBILITY =====
+const header = document.querySelector('.header');
+if (header) {
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > window.innerHeight * 0.3) {
+            header.classList.add('header-hidden');
+        } else {
+            header.classList.remove('header-hidden');
+        }
+    }, { passive: true });
+}
